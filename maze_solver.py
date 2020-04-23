@@ -1,10 +1,11 @@
+#!/usr/bin/python3
 
 import argparse
 
 
 def parse_args():
     """
-    Parses commane line arguments with argparse
+    Parses command line arguments with argparse
     -----------------
     Parameters: None
     _________________
@@ -71,5 +72,26 @@ def generate_new_maze():
 if __name__ == "__main__":
     args = parse_args()
     #testing
+
+    # length of first row (all rows should have the same length)
+    length = len(args.maze_rows[0])
+    # check for src and tgt in bounds
+    min = min(args.src_x, args.src_y, args.tgt_x, args.tgt_y)
+    max = max(args.src_x, args.src_y, args.tgt_x, args.tgt_y)
+    if min < 0 or max >= len(args.maze_rows):
+        print("Error: src/tgt out of maze bounds")
+        # quit
+
+    for row in args.maze_rows:
+        if len(row) != length:
+            print("Error: Maze not rectangular")
+            # quit
+        for char in row:
+            if char != '0' and char != '1':
+                print("Error: Input consists of characters that are not 0's or 1's")
+                # quit
+        # row is a string in the list, char is a char in the string row
+        # create graph char-by-char, row-by-row
+
     print(args.src_x)
     print(args.maze_rows)
