@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
-from graph import Graph 
+from graph import Graph
 
 
 def parse_args():
@@ -29,7 +29,9 @@ def parse_args():
     parser.add_argument("src_y", type=int, help="y coordinate of starting point in maze")
     parser.add_argument("tgt_x", type=int, help="x coordinate of target end point in maze")
     parser.add_argument("tgt_y", type=int, help="y coordinate of target end point in maze")
-    parser.add_argument("maze_rows", nargs='+', help="each row of the maze, separated by space, only 0 1 allowed")
+    parser.add_argument(
+        "maze_rows", nargs="+", help="each row of the maze, separated by space, only 0 1 allowed"
+    )
 
     args = parser.parse_args()
     return args
@@ -93,7 +95,7 @@ def build_graph(matrix):
     for y in range(rows):
         for x in range(columns):
             # determine whether or not to add edges for a particular vertex
-            if matrix[y][x] = 0:
+            if matrix[y][x] == 0:
                 # scan the right side of the vertex for an edge
                 if x + 1 < columns:
                     if matrix[y][x + 1] == 0:
@@ -115,25 +117,53 @@ def build_graph(matrix):
     return g
 
 
-def solve_maze():
+def solve_maze(g):
     """
     solves maze with breadth first search
+    -----------
+    Parameters:
+    g: Graph
+    -----------
+    Returns:
+    list of 2-element tuples, i.e. coordinates, (x, y) along path from source to target
     """
+    path = []
+
+    # TODO
+
+    return path
+
+
+def draw_solution(matrix, path):
+    """
+    draws out solution maze using
+    -----------
+    Paramters:
+    matrix: 2d int array
+    path: list of coordinates(tuples) along path from source to target
+    """
+    rows = len(matrix)
+    cols = len(matrx[0])
+
+    # TODO: need to figure out a good library to do this with, maybe turtle?
+
     pass
 
 
-def draw_solution():
-    """
-    draws out solution maze using pyplot
-    """
-    pass
-
-
-def print_solution():
+def print_solution(coords):
     """
     prints out coordinates of solution path in command line
+    ---------------
+    Parameters:
+    coords: two-int-tuple list
+    list of coordinates along path from source to target
     """
-    pass
+    string = ""
+    for i in range(len(coords) - 1):
+        string += coords[i] + "->"
+    string += coords[len(coords) - 1]
+
+    print(string)
 
 
 def generate_new_maze():
@@ -143,17 +173,25 @@ def generate_new_maze():
     pass
 
 
-if __name__ == "__main__"
+if __name__ == "__main__":
     """
     Call methods one by one to read in args, build maze and solve maze
     """
     args = parse_args()
+
     maze_matrix = construct_maze(args)
+
     graph = build_graph(maze_matrix)
-    
+
+    path = solve_maze(graph)
+
+    print_solution(path)
+
+    draw_solution(matrix, path)
+
+    generate_new_maze()
+
     # testing
     # ./maze_solver.py
     # python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
-
-    
 
