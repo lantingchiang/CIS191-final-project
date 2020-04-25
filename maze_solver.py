@@ -114,6 +114,34 @@ def build_graph(matrix):
 
     return g
 
+    """
+    matrix = [] 
+    for s in args.maze_rows:
+        row = []
+        for char in s:
+            if char != 0 and char != 1:
+                raise Exception("Illegal maze")
+            row.append(int(char))
+
+        matrix.append(row)
+
+    return matrix
+
+
+def build_graph(matrix):
+    """
+    constructs graph representation of maze from 2d-array
+    --------------
+    Parameters:
+    matrix: 2d int array representing maze
+    --------------
+    Returns:
+    Graph object of maze, with each cell being a node and an undirected edge existing between
+    any two cells that are connected in the up/down/left/right direction. Blocked cells
+    cannot be connected to any cells
+    """
+
+
 
 def solve_maze():
     """
