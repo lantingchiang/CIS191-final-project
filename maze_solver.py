@@ -51,10 +51,10 @@ def construct_maze(args):
     length = len(args.maze_rows[0])
 
     # check for src and tgt in bounds
-    min = min(args.src_x, args.src_y, args.tgt_x, args.tgt_y)
+    min_of_all = min(args.src_x, args.src_y, args.tgt_x, args.tgt_y)
     max_x = max(args.src_x, args.tgt_x)
     max_y = max(args.src_y, args.tgt_y)
-    if min < 0 or max_x >= length or max_y >= len(args.maze_rows):
+    if min_of_all < 0 or max_x >= length or max_y >= len(args.maze_rows):
         raise Exception("src/tgt out of maze bounds")
 
     for s in args.maze_rows:
