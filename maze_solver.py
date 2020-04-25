@@ -115,21 +115,6 @@ def build_graph(matrix):
     return g
 
 
-def build_graph(matrix):
-    """
-    constructs graph representation of maze from 2d-array
-    --------------
-    Parameters:
-    matrix: 2d int array representing maze
-    --------------
-    Returns:
-    Graph object of maze, with each cell being a node and an undirected edge existing between
-    any two cells that are connected in the up/down/left/right direction. Blocked cells
-    cannot be connected to any cells
-    """
-
-
-
 def solve_maze():
     """
     solves maze with breadth first search
