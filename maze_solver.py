@@ -143,33 +143,17 @@ def generate_new_maze():
     pass
 
 
-if __name__ == "__main__":
+if __name__ == "__main__"
+    """
+    Call methods one by one to read in args, build maze and solve maze
+    """
     args = parse_args()
+    maze_matrix = construct_maze(args)
+    graph = build_graph(maze_matrix)
+    
     # testing
     # ./maze_solver.py
     # python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
 
-    # delete the stuff below later
+    
 
-    # length of first row (all rows should have the same length)
-    length = len(args.maze_rows[0])
-    # check for src and tgt in bounds
-    min = min(args.src_x, args.src_y, args.tgt_x, args.tgt_y)
-    max = max(args.src_x, args.src_y, args.tgt_x, args.tgt_y)
-    if min < 0 or max >= len(args.maze_rows):
-        print("Error: src/tgt out of maze bounds")
-        # quit
-
-    for row in args.maze_rows:
-        if len(row) != length:
-            print("Error: Maze not rectangular")
-            # quit
-        for char in row:
-            if char != '0' and char != '1':
-                print("Error: Input consists of characters that are not 0's or 1's")
-                # quit
-        # row is a string in the list, char is a char in the string row
-        # create graph char-by-char, row-by-row
-
-    print(args.src_x)
-    print(args.maze_rows)
