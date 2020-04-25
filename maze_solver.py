@@ -114,19 +114,6 @@ def build_graph(matrix):
 
     return g
 
-    """
-    matrix = [] 
-    for s in args.maze_rows:
-        row = []
-        for char in s:
-            if char != 0 and char != 1:
-                raise Exception("Illegal maze")
-            row.append(int(char))
-
-        matrix.append(row)
-
-    return matrix
-
 
 def build_graph(matrix):
     """
