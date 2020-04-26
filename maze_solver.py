@@ -2,6 +2,8 @@
 
 import argparse
 from graph import Graph
+import tkinter as tk
+import turtle
 
 
 def parse_args():
@@ -64,7 +66,7 @@ def construct_maze(args):
             raise Exception("Maze not rectangular")
         row = []
         for char in s:
-            if char != 0 and char != 1:
+            if char != "0" and char != "1":
                 raise Exception("Illegal maze")
             row.append(int(char))
 
@@ -143,11 +145,48 @@ def draw_solution(matrix, path):
     path: list of coordinates(tuples) along path from source to target
     """
     rows = len(matrix)
-    cols = len(matrx[0])
+    cols = len(matrix[0])
+    # width of each cell drawn; window is a bit larger than 600 * 600
+    width = 600 / max(rows, cols)
 
-    # TODO: need to figure out a good library to do this with, maybe turtle?
+    # DRAW MAZE
+    turtle.tracer(0)  # turnoff animation
+    turtle.hideturtle()
+    for r in range(rows):
+        for c in range(cols):
+            x_pos = -300 + width * c
+            y_pos = 300 - width * r
+            turtle.penup()  # doesn't draw when moving pen
+            turtle.goto(x_pos, y_pos)
+            turtle.pendown()
 
-    pass
+            # draw filled shape if cell is blocked
+            if matrix[r][c] == 1:
+                turtle.fillcolor("black")
+                turtle.begin_fill()
+            # draw square
+            for i in range(4):
+                turtle.forward(width)
+                turtle.right(90)
+            turtle.end_fill()
+    turtle.update()  # show drawings
+
+    # DRAW PATH
+    # start at middle of first cell in path
+    turtle.tracer(1, 10)
+    turtle.penup()
+    turtle.goto(-300 + width * path[0][0] + width / 2, 300 - width * path[0][1] - width / 2)
+    turtle.pendown()
+    turtle.pencolor("orange")
+    turtle.pensize(10)
+    turtle.circle(10)  # draw starting point
+    for i in range(1, len(path) - 1):
+        # draw until middle of next cell
+        turtle.goto(-300 + width * path[i][0] + width / 2, 300 - width * path[i][1] - width / 2)
+
+    turtle.circle(10)  # draw end point
+
+    tk.mainloop()  # needed for canvas window
 
 
 def print_solution(coords):
@@ -180,18 +219,19 @@ if __name__ == "__main__":
     args = parse_args()
 
     maze_matrix = construct_maze(args)
+    print(maze_matrix)
 
     graph = build_graph(maze_matrix)
 
-    path = solve_maze(graph)
+    # path = solve_maze(graph)
 
-    print_solution(path)
+    # print_solution(path)
 
-    draw_solution(matrix, path)
+    path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
+    draw_solution(maze_matrix, path)
 
-    generate_new_maze()
+    # generate_new_maze()
 
     # testing
     # ./maze_solver.py
     # python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
-
