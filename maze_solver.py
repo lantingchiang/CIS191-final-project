@@ -239,19 +239,7 @@ def print_solution(coords):
     coords: two-int-tuple list
     list of coordinates along path from source to target
     """
-    # original code
-    # string = ""
-    # for i in range(len(coords) - 1):
-    # string += coords[i] + "->"
-    # string += coords[len(coords) - 1]
-
     string = "->".join(map(str, coords))
-
-    # for i in range(len(coords) - 1):
-    # string += "->".join(map(str, coords))
-    # string += map(str, coords)
-    # string += '->'.join(str(x) for x in coords)
-
     print(string)
 
 
@@ -322,14 +310,9 @@ if __name__ == "__main__":
 
     path = solve_maze(graph, maze_matrix, x1, y1, x2, y2)
 
-    #print_solution(path)
+    print_solution(path)
 
     #path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
-    #draw_solution(maze_matrix, path)
+    draw_solution(maze_matrix, path)
 
     # generate_new_maze()
-
-    # testing
-    # ./maze_solver.py 0 1 1 3 0000 0000 0000 0000 0000
-    # ./maze_solver.py 1 1 1 9 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1111 1111
-    # python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000

@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 
 
@@ -67,9 +66,3 @@ class Graph:
             raise Exception("Invalid vertex")
 
         return self.adj_list[u]
-
-"""
-if __name__ == "__main__":
-    g = Graph(3)
-    g.addEdge(0, 1) 
-"""
