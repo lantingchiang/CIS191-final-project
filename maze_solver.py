@@ -120,7 +120,6 @@ def build_graph(matrix):
     return g
 
 
-
 def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
     """
     solves maze with breadth first search
@@ -183,7 +182,7 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
 
     return path
 
-  
+
 def draw_solution(matrix, path):
     """
     draws out solution maze using
@@ -289,12 +288,12 @@ if __name__ == "__main__":
 
     path = solve_maze(graph, maze_matrix, x1, y1, x2, y2)
 
-    # print(path)  # for testing purposes
+    print(path)  # for testing purposes
 
-    # print_solution(path)
+    print_solution(path)
 
     # path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
-    # draw_solution(maze_matrix, path)
+    draw_solution(maze_matrix, path)
 
     # generate_new_maze()
 
@@ -302,5 +301,3 @@ if __name__ == "__main__":
     # ./maze_solver.py 0 1 1 3 0000 0000 0000 0000 0000
     # ./maze_solver.py 1 1 1 9 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1111 1111
     # python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
-
-
