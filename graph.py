@@ -48,11 +48,9 @@ class Graph:
         # add edge by adding to list of neighbors if it's not already in
         if v not in self.adj_list[u] and u not in self.adj_list[v]:
             # undirected graph -> add edge in both directions
-            print("before", self.adj_list)
             self.adj_list[u].add(v)
-            print("one add", self.adj_list)
             self.adj_list[v].add(u)
-            print("after", self.adj_list)
+            
 
     def neighbors(self, u):
         """

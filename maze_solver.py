@@ -157,10 +157,6 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
                 discovered[u] = True
                 d.append(u)
                 parent[u] = v
-    
-    ##########
-    print(parent) # testing, buggy parent array?
-    ##########
 
     # get the solution path by traversing the parent pointers from target
     path = []
@@ -174,7 +170,6 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
         # convert vertex into a coordinate and append it to the solution path
         x = parent[curr] % columns
         coordinate = (x, int((parent[curr] - x) / columns))
-        print(coordinate)
         path.append(coordinate)
         curr = parent[curr]
     # reverse the path since it starts with target and traces back to source
@@ -245,17 +240,17 @@ def print_solution(coords):
     list of coordinates along path from source to target
     """
     # original code
-    #string = ""
-    #for i in range(len(coords) - 1):
-        #string += coords[i] + "->"
-    #string += coords[len(coords) - 1]
+    # string = ""
+    # for i in range(len(coords) - 1):
+    # string += coords[i] + "->"
+    # string += coords[len(coords) - 1]
 
     string = "->".join(map(str, coords))
 
-    #for i in range(len(coords) - 1):
-        #string += "->".join(map(str, coords))
-    #string += map(str, coords)
-    #string += '->'.join(str(x) for x in coords)
+    # for i in range(len(coords) - 1):
+    # string += "->".join(map(str, coords))
+    # string += map(str, coords)
+    # string += '->'.join(str(x) for x in coords)
 
     print(string)
 
