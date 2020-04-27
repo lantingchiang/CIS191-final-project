@@ -2,6 +2,7 @@
 
 import argparse
 from graph import Graph
+from collections import deque
 import tkinter as tk
 import turtle
 
@@ -119,23 +120,70 @@ def build_graph(matrix):
     return g
 
 
-def solve_maze(g):
+
+def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
     """
     solves maze with breadth first search
     -----------
     Parameters:
     g: Graph
+    matrix: 2d int array representing maze
+    src_x: x coordinate of starting point in maze
+    src_y: y coordinate of starting point in maze
+    tgt_x: x coordinate of target end point in maze
+    tgt_y: y coordinate of target end point in maze
     -----------
     Returns:
     list of 2-element tuples, i.e. coordinates, (x, y) along path from source to target
     """
-    path = []
+    rows = len(matrix)
+    columns = len(matrix[0])
 
-    # TODO
+    # convert source and target coordinates to vertices
+    s = (src_y * columns) + src_x
+    t = (tgt_y * columns) + tgt_x
+
+    # breadth first search with discovered and parent arrays
+    discovered = [False] * g.getSize()
+    parent = [None] * g.getSize()
+    d = deque()
+    d.append(s)
+    discovered[s] = True
+    # main loop of BFS, run from source vertex
+    while len(d) != 0:
+        v = d.popleft()
+
+        for u in g.neighbors(v):
+            if not discovered[u]:
+                discovered[u] = True
+                d.append(u)
+                parent[u] = v
+
+    ##########
+    print("parent", parent)  # testing, buggy parent array?
+    ##########
+
+    # get the solution path by traversing the parent pointers from target
+    path = []
+    curr = t
+    tgt = (tgt_x, tgt_y)
+    path.append(tgt)
+    while curr != s:
+        # no path exists so return an empty list
+        if parent[curr] is None:
+            return []
+        # convert vertex into a coordinate and append it to the solution path
+        x = parent[curr] % columns
+        coordinate = (x, int((parent[curr] - x) / columns))
+        print("coord", coordinate)
+        path.append(coordinate)
+        curr = parent[curr]
+    # reverse the path since it starts with target and traces back to source
+    path.reverse()
 
     return path
 
-
+  
 def draw_solution(matrix, path):
     """
     draws out solution maze using
@@ -197,10 +245,18 @@ def print_solution(coords):
     coords: two-int-tuple list
     list of coordinates along path from source to target
     """
-    string = ""
-    for i in range(len(coords) - 1):
-        string += coords[i] + "->"
-    string += coords[len(coords) - 1]
+    # original code
+    # string = ""
+    # for i in range(len(coords) - 1):
+    # string += coords[i] + "->"
+    # string += coords[len(coords) - 1]
+
+    string = "->".join(map(str, coords))
+
+    # for i in range(len(coords) - 1):
+    # string += "->".join(map(str, coords))
+    # string += map(str, coords)
+    # string += '->'.join(str(x) for x in coords)
 
     print(string)
 
@@ -218,20 +274,33 @@ if __name__ == "__main__":
     """
     args = parse_args()
 
+    x1 = args.src_x
+    y1 = args.src_y
+    x2 = args.tgt_x
+    y2 = args.tgt_y
+
     maze_matrix = construct_maze(args)
     print(maze_matrix)
 
     graph = build_graph(maze_matrix)
 
-    # path = solve_maze(graph)
+    for i in range(graph.getSize()):
+        print("neighbors", i, "are", graph.neighbors(i))
+
+    path = solve_maze(graph, maze_matrix, x1, y1, x2, y2)
+
+    # print(path)  # for testing purposes
 
     # print_solution(path)
 
-    path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
-    draw_solution(maze_matrix, path)
+    # path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
+    # draw_solution(maze_matrix, path)
 
     # generate_new_maze()
 
     # testing
-    # ./maze_solver.py
+    # ./maze_solver.py 0 1 1 3 0000 0000 0000 0000 0000
+    # ./maze_solver.py 1 1 1 9 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1111 1111
     # python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
+
+

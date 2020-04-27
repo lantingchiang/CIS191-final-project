@@ -20,7 +20,7 @@ class Graph:
         int list at index i contains the neighbors of node i (nodes represented as ints from 0 to n-1)
         """
         # adjacency list of graph (entry at index i = list of neighbors of node i) initialized with empty neighbor lists
-        self.adj_list = [[]] * n
+        self.adj_list = [set() for _ in range(n)]
 
     def getSize(self):
         """
@@ -48,8 +48,11 @@ class Graph:
         # add edge by adding to list of neighbors if it's not already in
         if v not in self.adj_list[u] and u not in self.adj_list[v]:
             # undirected graph -> add edge in both directions
-            self.adj_list[u].append(v)
-            self.adj_list[v].append(u)
+            print("before", self.adj_list)
+            self.adj_list[u].add(v)
+            print("one add", self.adj_list)
+            self.adj_list[v].add(u)
+            print("after", self.adj_list)
 
     def neighbors(self, u):
         """
@@ -66,3 +69,9 @@ class Graph:
             raise Exception("Invalid vertex")
 
         return self.adj_list[u]
+
+"""
+if __name__ == "__main__":
+    g = Graph(3)
+    g.addEdge(0, 1) 
+"""
