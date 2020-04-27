@@ -115,10 +115,10 @@ def build_graph(matrix):
                 if y - 1 >= 0:
                     if matrix[y - 1][x] == 0:
                         g.addEdge(vertex, vertex - columns)
-                print("vertex", vertex, "neighbors", g.neighbors(vertex))
             vertex += 1
 
     return g
+
 
 
 def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
@@ -183,14 +183,14 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
 
     return path
 
-
+  
 def draw_solution(matrix, path):
     """
-    draws out solution maze
+    draws out solution maze using
     -----------
-    Parameters:
+    Paramters:
     matrix: 2d int array
-    path: list of coordinates (tuples) along path from source to target
+    path: list of coordinates(tuples) along path from source to target
     """
     rows = len(matrix)
     cols = len(matrix[0])
@@ -283,6 +283,7 @@ if __name__ == "__main__":
     print(maze_matrix)
 
     graph = build_graph(maze_matrix)
+
     for i in range(graph.getSize()):
         print("neighbors", i, "are", graph.neighbors(i))
 
@@ -293,11 +294,13 @@ if __name__ == "__main__":
     # print_solution(path)
 
     # path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
-# draw_solution(maze_matrix, path)
+    # draw_solution(maze_matrix, path)
 
-# generate_new_maze()
+    # generate_new_maze()
 
-# testing
-# ./maze_solver.py 0 1 1 3 0000 0000 0000 0000 0000
-# ./maze_solver.py 1 1 1 9 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1111 1111
-# python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
+    # testing
+    # ./maze_solver.py 0 1 1 3 0000 0000 0000 0000 0000
+    # ./maze_solver.py 1 1 1 9 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1111 1111
+    # python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
+
+
