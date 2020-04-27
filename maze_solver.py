@@ -3,9 +3,9 @@
 import argparse
 from graph import Graph
 from collections import deque
-import tkinter as tk
 import turtle
 import random
+import time
 
 
 def parse_args():
@@ -126,7 +126,7 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
     solves maze with breadth first search
     -----------
     Parameters:
-    g: Graph
+    g: Graph representation of maze
     matrix: 2d int array representing maze
     src_x: x coordinate of starting point in maze
     src_y: y coordinate of starting point in maze
@@ -136,7 +136,6 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
     Returns:
     list of 2-element tuples, i.e. coordinates, (x, y) along path from source to target
     """
-    rows = len(matrix)
     columns = len(matrix[0])
 
     # convert source and target coordinates to vertices
@@ -178,20 +177,19 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
     return path
 
 
-def draw_solution(matrix, path):
+def draw_maze(matrix):
     """
-    draws out solution maze
+    Helper method to draw a maze (gets re-used in draw_solution)
     -----------
     Parameters:
     matrix: 2d int array
-    path: list of coordinates (tuples) along path from source to target
+        maze to be drawn
     """
     rows = len(matrix)
     cols = len(matrix[0])
     # width of each cell drawn; window is a bit larger than 600 * 600
     width = 600 / max(rows, cols)
 
-    # DRAW MAZE
     turtle.tracer(0)  # turnoff animation
     turtle.hideturtle()
     for r in range(rows):
@@ -213,23 +211,60 @@ def draw_solution(matrix, path):
             turtle.end_fill()
     turtle.update()  # show drawings
 
+
+def draw_solution(matrix, path, new_matrix, src, tgt):
+    """
+    draws out solution maze
+    -----------
+    Parameters:
+    matrix: 2d int array of the matrix solved
+    path: list of coordinates (tuples) along path from source to target
+    new_matrix: 2d int array of the new matrix generated
+    """
+    rows = len(matrix)
+    cols = len(matrix[0])
+    # width of each cell drawn; window is a bit larger than 600 * 600
+    width = 600 / max(rows, cols)
+
+    # DRAW MAZE
+    window = turtle.Screen()
+    draw_maze(matrix)
+
     # DRAW PATH
-    if len(path) > 0:
-        # start at middle of first cell in path
-        turtle.tracer(1, 10)
-        turtle.penup()
-        turtle.goto(-300 + width * path[0][0] + width / 2, 300 - width * path[0][1] - width / 2)
-        turtle.pendown()
-        turtle.pencolor("orange")
-        turtle.pensize(10)
-        turtle.circle(10)  # draw starting point
-        for i in range(1, len(path) - 1):
-            # draw until middle of next cell
-            turtle.goto(-300 + width * path[i][0] + width / 2, 300 - width * path[i][1] - width / 2)
+    # start at middle of first cell in path
+    turtle.tracer(1, 10)
+    turtle.penup()
+    turtle.goto(-300 + width * path[0][0] + width / 2, 300 - width * path[0][1] - width / 2)
+    turtle.pendown()
+    turtle.pencolor("orange")
+    turtle.pensize(10)
+    turtle.circle(10)  # draw starting point
+    for i in range(1, len(path) - 1):
+        # draw until middle of next cell
+        turtle.goto(-300 + width * path[i][0] + width / 2, 300 - width * path[i][1] - width / 2)
 
-        turtle.circle(10)  # draw end point
+    turtle.circle(10)  # draw end point
 
-    tk.mainloop()  # needed for canvas window
+    # DRAW NEW MAZE (after delayed seconds)
+    time.sleep(2)
+    turtle.reset()
+    draw_maze(new_matrix)
+    # label src & tgt
+    turtle.penup()
+    turtle.goto(-300 + width * src[0] + width / 2, 300 - width * src[1] - width / 2)
+    turtle.pendown()
+    turtle.shape("turtle")
+    turtle.stamp()
+    turtle.penup()
+    turtle.goto(-300 + width * tgt[0] + width / 2, 300 - width * tgt[1] - width / 2)
+    turtle.pendown()
+    turtle.pencolor("orange")
+    turtle.fillcolor("orange")
+    turtle.begin_fill()
+    turtle.circle(10)
+    turtle.end_fill()
+    turtle.update()
+    window.exitonclick()
 
 
 def print_solution(coords):
@@ -238,18 +273,22 @@ def print_solution(coords):
     ---------------
     Parameters:
     coords: two-int-tuple list
-    list of coordinates along path from source to target
+        list of coordinates along path from source to target
     """
     string = "->".join(map(str, coords))
     print(string)
 
 
-def generate_new_maze():
+def generate_new_maze(width, height):
     """
-    generate a new maze to output to the user
+    Generates a new maze of the same dimensions as the input maze to output to the user
+    --------------
+    Parameters:
+    width: int
+        width of the maze
+    height: int
+        height of the maze
     """
-    row_length = random.randint(1, 20)
-    column_height = random.randint(1, 20)
     matrix = []
     src_x = 0
     src_y = 0
@@ -257,9 +296,9 @@ def generate_new_maze():
     tgt_y = 0
 
     # build maze of randomly-generated 0's and 1's
-    for j in range(column_height):
+    for j in range(height):
         row = []
-        for i in range(row_length):
+        for i in range(width):
             maze_block = random.randint(0, 1)
             # last 0 encounted becomes the tgt vertex
             if maze_block == 0:
@@ -270,8 +309,8 @@ def generate_new_maze():
         matrix.append(row)
 
     # iterate through the maze again to get a src vertex
-    for j in range(column_height):
-        for i in range(row_length):
+    for j in range(height):
+        for i in range(width):
             # first 0 encountered becomes the src vertex
             if matrix[i][j] == 0:
                 src_x = i
@@ -281,16 +320,19 @@ def generate_new_maze():
             continue
         break
 
+    # if there were no empty cells src=tgt=(0, 0); else src and target would be valid
     # force valid src and tgt if there were no valid ones encountered
-    if matrix[src_x][src_y] == 1:
-        matrix[src_x][src_y] = 0
-    if matrix[tgt_x][tgt_y] == 1:
-        matrix[tgt_x][tgt_y] == 0
+    # all guaranteed to be valid, but no guarantee that solution path exists
+    if matrix[src_y][src_x] == 1:
+        matrix[src_y][src_x] = 0
+    if matrix[tgt_y][tgt_x] == 1:
+        matrix[tgt_y][tgt_x] == 0
 
     # print src_x, src_y, tgt_x, tgt_y
-    # all guaranteed to be valid, but no guarantee that solution path exists
+    print("starting point", (src_x, src_y))
+    print("end point", (tgt_x, tgt_y))
 
-    draw_solution(matrix, [])
+    return matrix, (src_x, src_y), (tgt_x, tgt_y)
 
 
 if __name__ == "__main__":
@@ -304,15 +346,14 @@ if __name__ == "__main__":
     x2 = args.tgt_x
     y2 = args.tgt_y
 
-    maze_matrix = construct_maze(args)
+    maze_to_solve = construct_maze(args)
 
-    graph = build_graph(maze_matrix)
+    graph = build_graph(maze_to_solve)
 
-    path = solve_maze(graph, maze_matrix, x1, y1, x2, y2)
+    path = solve_maze(graph, maze_to_solve, x1, y1, x2, y2)
 
     print_solution(path)
 
-    draw_solution(maze_matrix, path)
+    new_maze, src, tgt = generate_new_maze(len(maze_to_solve[0]), len(maze_to_solve))
 
-    # generate_new_maze()
-
+    draw_solution(maze_to_solve, path, new_maze, src, tgt)
