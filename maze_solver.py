@@ -246,7 +246,7 @@ def draw_solution(matrix, path, new_matrix, src, tgt):
     turtle.circle(10)  # draw end point
 
     # DRAW NEW MAZE (after delayed seconds)
-    time.sleep(2)
+    time.sleep(5)
     turtle.reset()
     draw_maze(new_matrix)
     # label src & tgt
