@@ -115,6 +115,7 @@ def build_graph(matrix):
                 if y - 1 >= 0:
                     if matrix[y - 1][x] == 0:
                         g.addEdge(vertex, vertex - columns)
+                print("vertex", vertex, "neighbors", g.neighbors(vertex))
             vertex += 1
 
     return g
@@ -151,14 +152,15 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
     # main loop of BFS, run from source vertex
     while len(d) != 0:
         v = d.popleft()
+
         for u in g.neighbors(v):
-            if (not discovered[u]):
+            if not discovered[u]:
                 discovered[u] = True
                 d.append(u)
                 parent[u] = v
-    
+
     ##########
-    print(parent) # testing, buggy parent array?
+    print("parent", parent)  # testing, buggy parent array?
     ##########
 
     # get the solution path by traversing the parent pointers from target
@@ -173,7 +175,7 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
         # convert vertex into a coordinate and append it to the solution path
         x = parent[curr] % columns
         coordinate = (x, int((parent[curr] - x) / columns))
-        print(coordinate)
+        print("coord", coordinate)
         path.append(coordinate)
         curr = parent[curr]
     # reverse the path since it starts with target and traces back to source
@@ -244,17 +246,17 @@ def print_solution(coords):
     list of coordinates along path from source to target
     """
     # original code
-    #string = ""
-    #for i in range(len(coords) - 1):
-        #string += coords[i] + "->"
-    #string += coords[len(coords) - 1]
+    # string = ""
+    # for i in range(len(coords) - 1):
+    # string += coords[i] + "->"
+    # string += coords[len(coords) - 1]
 
     string = "->".join(map(str, coords))
 
-    #for i in range(len(coords) - 1):
-        #string += "->".join(map(str, coords))
-    #string += map(str, coords)
-    #string += '->'.join(str(x) for x in coords)
+    # for i in range(len(coords) - 1):
+    # string += "->".join(map(str, coords))
+    # string += map(str, coords)
+    # string += '->'.join(str(x) for x in coords)
 
     print(string)
 
@@ -281,19 +283,21 @@ if __name__ == "__main__":
     print(maze_matrix)
 
     graph = build_graph(maze_matrix)
+    for i in range(graph.getSize()):
+        print("neighbors", i, "are", graph.neighbors(i))
 
     path = solve_maze(graph, maze_matrix, x1, y1, x2, y2)
 
-    print(path) # for testing purposes
+    # print(path)  # for testing purposes
 
-    print_solution(path)
+    # print_solution(path)
 
-    path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
-    draw_solution(maze_matrix, path)
+    # path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
+# draw_solution(maze_matrix, path)
 
-    # generate_new_maze()
+# generate_new_maze()
 
-    # testing
-    # ./maze_solver.py 0 1 1 3 0000 0000 0000 0000 0000
-    # ./maze_solver.py 1 1 1 9 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1111 1111
-    # python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
+# testing
+# ./maze_solver.py 0 1 1 3 0000 0000 0000 0000 0000
+# ./maze_solver.py 1 1 1 9 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1111 1111
+# python3 -c 'import maze_solver; maze_solver.parse_args()' 0 0 0 0 01010 00000
