@@ -239,7 +239,7 @@ def draw_solution(matrix, path, new_matrix, src, tgt):
     turtle.pencolor("orange")
     turtle.pensize(10)
     turtle.circle(10)  # draw starting point
-    for i in range(1, len(path) - 1):
+    for i in range(1, len(path)):
         # draw until middle of next cell
         turtle.goto(-300 + width * path[i][0] + width / 2, 300 - width * path[i][1] - width / 2)
 
@@ -276,7 +276,7 @@ def print_solution(coords):
         list of coordinates along path from source to target
     """
     string = "->".join(map(str, coords))
-    print(string)
+    print("Solution", string)
 
 
 def generate_new_maze(width, height):
@@ -329,8 +329,8 @@ def generate_new_maze(width, height):
         matrix[tgt_y][tgt_x] == 0
 
     # print src_x, src_y, tgt_x, tgt_y
-    print("starting point", (src_x, src_y))
-    print("end point", (tgt_x, tgt_y))
+    print("new maze starting point", (src_x, src_y))
+    print("new maze end point", (tgt_x, tgt_y))
 
     return matrix, (src_x, src_y), (tgt_x, tgt_y)
 
