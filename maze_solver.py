@@ -153,7 +153,7 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
     while len(d) != 0:
         v = d.popleft()
         for u in g.neighbors(v):
-            if (not discovered[u]):
+            if not discovered[u]:
                 discovered[u] = True
                 d.append(u)
                 parent[u] = v
@@ -214,19 +214,20 @@ def draw_solution(matrix, path):
     turtle.update()  # show drawings
 
     # DRAW PATH
-    # start at middle of first cell in path
-    turtle.tracer(1, 10)
-    turtle.penup()
-    turtle.goto(-300 + width * path[0][0] + width / 2, 300 - width * path[0][1] - width / 2)
-    turtle.pendown()
-    turtle.pencolor("orange")
-    turtle.pensize(10)
-    turtle.circle(10)  # draw starting point
-    for i in range(1, len(path) - 1):
-        # draw until middle of next cell
-        turtle.goto(-300 + width * path[i][0] + width / 2, 300 - width * path[i][1] - width / 2)
+    if len(path) > 0:
+        # start at middle of first cell in path
+        turtle.tracer(1, 10)
+        turtle.penup()
+        turtle.goto(-300 + width * path[0][0] + width / 2, 300 - width * path[0][1] - width / 2)
+        turtle.pendown()
+        turtle.pencolor("orange")
+        turtle.pensize(10)
+        turtle.circle(10)  # draw starting point
+        for i in range(1, len(path) - 1):
+            # draw until middle of next cell
+            turtle.goto(-300 + width * path[i][0] + width / 2, 300 - width * path[i][1] - width / 2)
 
-    turtle.circle(10)  # draw end point
+        turtle.circle(10)  # draw end point
 
     tk.mainloop()  # needed for canvas window
 
@@ -304,7 +305,6 @@ if __name__ == "__main__":
     y2 = args.tgt_y
 
     maze_matrix = construct_maze(args)
-    print(maze_matrix)
 
     graph = build_graph(maze_matrix)
 
@@ -312,7 +312,7 @@ if __name__ == "__main__":
 
     print_solution(path)
 
-    #path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
     draw_solution(maze_matrix, path)
 
     # generate_new_maze()
+
