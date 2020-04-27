@@ -5,6 +5,7 @@ from graph import Graph
 from collections import deque
 import tkinter as tk
 import turtle
+import random
 
 
 def parse_args():
@@ -151,16 +152,11 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
     # main loop of BFS, run from source vertex
     while len(d) != 0:
         v = d.popleft()
-
         for u in g.neighbors(v):
-            if not discovered[u]:
+            if (not discovered[u]):
                 discovered[u] = True
                 d.append(u)
                 parent[u] = v
-
-    ##########
-    print("parent", parent)  # testing, buggy parent array?
-    ##########
 
     # get the solution path by traversing the parent pointers from target
     path = []
@@ -174,7 +170,6 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
         # convert vertex into a coordinate and append it to the solution path
         x = parent[curr] % columns
         coordinate = (x, int((parent[curr] - x) / columns))
-        print("coord", coordinate)
         path.append(coordinate)
         curr = parent[curr]
     # reverse the path since it starts with target and traces back to source
@@ -185,11 +180,11 @@ def solve_maze(g, matrix, src_x, src_y, tgt_x, tgt_y):
 
 def draw_solution(matrix, path):
     """
-    draws out solution maze using
+    draws out solution maze
     -----------
-    Paramters:
+    Parameters:
     matrix: 2d int array
-    path: list of coordinates(tuples) along path from source to target
+    path: list of coordinates (tuples) along path from source to target
     """
     rows = len(matrix)
     cols = len(matrix[0])
@@ -264,7 +259,49 @@ def generate_new_maze():
     """
     generate a new maze to output to the user
     """
-    pass
+    row_length = random.randint(1, 20)
+    column_height = random.randint(1, 20)
+    matrix = []
+    src_x = 0
+    src_y = 0
+    tgt_x = 0
+    tgt_y = 0
+
+    # build maze of randomly-generated 0's and 1's
+    for j in range(column_height):
+        row = []
+        for i in range(row_length):
+            maze_block = random.randint(0, 1)
+            # last 0 encounted becomes the tgt vertex
+            if maze_block == 0:
+                tgt_x = i
+                tgt_y = j
+            row.append(maze_block)
+
+        matrix.append(row)
+
+    # iterate through the maze again to get a src vertex
+    for j in range(column_height):
+        for i in range(row_length):
+            # first 0 encountered becomes the src vertex
+            if matrix[i][j] == 0:
+                src_x = i
+                src_y = j
+                break
+        else:
+            continue
+        break
+
+    # force valid src and tgt if there were no valid ones encountered
+    if matrix[src_x][src_y] == 1:
+        matrix[src_x][src_y] = 0
+    if matrix[tgt_x][tgt_y] == 1:
+        matrix[tgt_x][tgt_y] == 0
+
+    # print src_x, src_y, tgt_x, tgt_y
+    # all guaranteed to be valid, but no guarantee that solution path exists
+
+    draw_solution(matrix, [])
 
 
 if __name__ == "__main__":
@@ -283,17 +320,12 @@ if __name__ == "__main__":
 
     graph = build_graph(maze_matrix)
 
-    for i in range(graph.getSize()):
-        print("neighbors", i, "are", graph.neighbors(i))
-
     path = solve_maze(graph, maze_matrix, x1, y1, x2, y2)
 
-    print(path)  # for testing purposes
+    #print_solution(path)
 
-    print_solution(path)
-
-    # path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
-    draw_solution(maze_matrix, path)
+    #path = [(1, 1), (2, 1), (2, 2), (3, 2)]  # dummy path for testing
+    #draw_solution(maze_matrix, path)
 
     # generate_new_maze()
 
