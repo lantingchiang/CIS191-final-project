@@ -17,7 +17,7 @@ Note:
   <li> the upper left hand corner of the maze corresponds to coordinate (0, 0)</li>
   <li> each row in the maze has to be of the same length </li>
   <li> all inputs are required </li>
-  <li> `python3 maze_solver.py -h` to see help message
+  <li> <code>python3 maze_solver.py -h</code> to see help message
 </ul>
 
 ## Description
